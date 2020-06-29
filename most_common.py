@@ -17,7 +17,7 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
 # %% markdown
-Voy a unir todos los dataframes para trabajar directamente con
+Unimos todos los dataframes para trabajar directamente con
 todos los datos con los que disponemos
 
 # %%
@@ -30,7 +30,7 @@ df = pd.concat([df0, df1, df2], ignore_index=True)
 # %% markdown
 ## Analisis de palabras más comunes.
 
-Primero definamos funciones que nos van a servir
+Primero definamos funciones que nos van a servir.
 
 # %%
 flatten_list = lambda nested_list: [
@@ -102,6 +102,7 @@ not_sarc_token_freq = get_token_freq(lower_not_sarc_tokens)
 
 # %% markdown
 Veamos los primeros analisis
+
 # %% markdown
 Palabras mas frecuentes en textos con sarcasmo:
 
@@ -213,7 +214,7 @@ Una vez realizada la lematización y observados los gráficos obtenidos, no
 encontramos diferencias o similitudes que nos resultaran útiles para nuestra
 investigación.
 
-# %%
+# %% markdown
 ### Analisis con lematización y sin Stopwords
 
 # %%
