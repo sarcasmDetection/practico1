@@ -1,5 +1,5 @@
 # %% markdown
-# Analisis y Visualización sobre DFs de Sarcasmo y No Sarcasmo
+# Lematización
 
 # %%
 import spacy
