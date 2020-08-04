@@ -91,12 +91,13 @@ for tfidf in docs_tfidf:
         above_avg_tfidf.append(above_avg_tokens)
 
 # %%
-above_avg_tokens = {}
+important_tokens = {}
 for doc in above_avg_tfidf:
     for token in doc:
-        above_avg_tokens[token] = above_avg_tokens.get(token, 0) + doc[token]
+        important_tokens[token] = important_tokens.get(token, 0) + doc[token]
 
 # %%
 # sort the tokens that appear the most in the documents
 sorted_important_tokens = sorted(
-    above_avg_tokens.items(), key=lambda x: x[1], reverse=True)
+    important_tokens.items(), key=lambda x: x[1], reverse=True)
+sorted_important_tokens
