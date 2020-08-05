@@ -3,6 +3,7 @@ import math
 import pandas as pd
 import spacy
 import numpy as np
+import seaborn as sn
 
 # %%
 nlp = spacy.load('en_core_web_sm')
@@ -70,34 +71,99 @@ def get_doc_tfidf(doc_tf, docs_idf):
     return doc_tfidf
 
 # %%
-docs_idf = get_docs_idf(sarc_df)
+def get_tfidf_sum(token, docs_tfidf):
+    tfidf_sum = 0
+
+    for doc_tfidf in docs_tfidf:
+        tfidf_sum += doc_tfidf.get(token, 0)
+
+    return tfidf_sum
 
 # %%
-docs_tf = [get_doc_tf(doc) for doc in sarc_df]
+def get_above_avg_tokens(docs_tfidf):
+    # get the tokens that have a tf-idf above average of each document
+    above_avg_tfidf = []
+
+    for tfidf in docs_tfidf:
+        for token in tfidf:
+            above_avg_tokens = {}
+            if tfidf[token] > np.average(list(tfidf.values())):
+                above_avg_tokens[token] = tfidf[token]
+        # if no token is above average we wont be taking it into account
+        if above_avg_tokens != {}:
+            above_avg_tfidf.append(above_avg_tokens)
+
+    return above_avg_tfidf
 
 # %%
-docs_tfidf = [get_doc_tfidf(doc_tf, docs_idf) for doc_tf in docs_tf]
+def get_sum_tfidf(above_avg_tfidf):
+    tokens_tfidf_sum = {}
+
+    for doc in above_avg_tfidf:
+        for token in doc:
+            curr_token_value = tokens_tfidf_sum.get(token, 0)
+            tokens_tfidf_sum[token] = curr_token_value + doc[token]
+    # sort important tokens
+    sorted_tfidf_sum = sorted(
+        tokens_tfidf_sum.items(), key=lambda x: x[1], reverse=True)
+
+    return sorted_tfidf_sum
 
 # %%
-# get the tokens that have a tf-idf above average of each document
-above_avg_tfidf = []
-for tfidf in docs_tfidf:
-    for token in tfidf:
-        above_avg_tokens = {}
-        if tfidf[token] > np.average(list(tfidf.values())):
-            above_avg_tokens[token] = tfidf[token]
-    # if no token is above average we wont be taking it into account
-    if above_avg_tokens != {}:
-        above_avg_tfidf.append(above_avg_tokens)
+def lineplot_graph(tuples, label):
+    x = [x for x, y in tuples]
+    y = [y for x, y in tuples]
+
+    graph = sn.lineplot(
+        x=x,
+        y=y,
+        label=label,
+        sort=False,
+    )
+    x_labels_fix = graph.set_xticklabels(
+        labels=x, rotation=90)
+
 
 # %%
-important_tokens = {}
-for doc in above_avg_tfidf:
-    for token in doc:
-        important_tokens[token] = important_tokens.get(token, 0) + doc[token]
+sarc_docs_idf = get_docs_idf(sarc_df)
+notsarc_docs_idf = get_docs_idf(notsarc_df)
 
 # %%
-# sort the tokens that appear the most in the documents
-sorted_important_tokens = sorted(
-    important_tokens.items(), key=lambda x: x[1], reverse=True)
-sorted_important_tokens
+sarc_docs_tf = [get_doc_tf(doc) for doc in sarc_df]
+notsarc_docs_tf = [get_doc_tf(doc) for doc in notsarc_df]
+
+# %%
+sarc_docs_tfidf = [
+    get_doc_tfidf(doc_tf, sarc_docs_idf)
+    for doc_tf in sarc_docs_tf
+]
+notsarc_docs_tfidf = [
+    get_doc_tfidf(doc_tf, notsarc_docs_idf)
+    for doc_tf in notsarc_docs_tf
+]
+
+# %%
+ab_avg_sarc_tokens = get_above_avg_tokens(sarc_docs_tfidf)
+ab_avg_notsarc_tokens = get_above_avg_tokens(notsarc_docs_tfidf)
+
+# %%
+sarc_tfidf_sum = get_sum_tfidf(ab_avg_sarc_tokens)
+notsarc_tfidf_sum = get_sum_tfidf(ab_avg_notsarc_tokens)
+
+# %%
+x_sarc = [x for x,y in sarc_tfidf_sum]
+y_sarc = [y for x,y in sarc_tfidf_sum]
+sarc_label = "SARC TF-IDF"
+
+x_notsarc = [x for x,y in notsarc_tfidf_sum]
+y_notsarc = [y for x,y in notsarc_tfidf_sum]
+notsarc_label = "NOT SARC TF-IDF"
+
+# %%
+lineplot_graph(
+    sarc_tfidf_sum[:15], sarc_label,
+)
+# %%
+lineplot_graph(
+    notsarc_tfidf_sum[:15], sarc_label,
+)
