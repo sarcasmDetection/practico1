@@ -163,7 +163,8 @@ notsarc_label = "NOT SARC TF-IDF"
 lineplot_graph(
     sarc_tfidf_sum[:15], sarc_label,
 )
+
 # %%
 lineplot_graph(
-    notsarc_tfidf_sum[:15], sarc_label,
+    notsarc_tfidf_sum[:15], notsarc_label,
 )

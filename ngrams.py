@@ -70,3 +70,6 @@ def get_doc_dep_bigrams(texts):
     return docs_bigrams
 
 doc_dep_bigrams = get_doc_dep_bigrams(sarc_df)
+
+# %%
+display_dep(nlp(sarc_df[2609]))
