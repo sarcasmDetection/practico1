@@ -28,9 +28,9 @@ nltk.download('stopwords')
 # %%
 # load the data thingies and concatenate them
 df = get_df([
-    "./dataframes/GEN-sarc-notsarc.csv",
-    "./dataframes/RQ-sarc-notsarc.csv",
-    "./dataframes/HYP-sarc-notsarc.csv",
+    "../dataframes/GEN-sarc-notsarc.csv",
+    "../dataframes/RQ-sarc-notsarc.csv",
+    "../dataframes/HYP-sarc-notsarc.csv",
 ])
 
 # %%
@@ -105,7 +105,7 @@ print(classification_report(y_test, y_pred))
 
 confusion_matrix(y_test, y_pred)
 # %%markdown
-## Super Vector Machine
+## Support Vector Machine
 
 # %%
 # train a classifier thingy
@@ -121,3 +121,24 @@ y_pred = svm_clf.predict(X_test)
 from sklearn.metrics import classification_report, confusion_matrix
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+
+# %%markdown
+La medida 'Accuracy' es una forma de medir la frecuencia con la que el algoritmo
+clasifica un punto de datos correctamente. En un modelo, se corresponde al
+número de puntos de datos predichos correctamente de todos los puntos de datos.
+En ambos modelos, obtuvimos un 'Accuracy' que supera el 70%. Esto significa que
+nuestro predictor funciona correctamente para decirnos si una frase es
+sarcástica, o no, 70 veces de 100. Creemos que es un buen numero para obtener
+como resultado, y pensamos seguir modificando parámetros para poder mejorar aún
+mas nuestros modelos.
+
+'Precision-Recall' es una medida útil del éxito de la predicción cuando las
+clases están muy desequilibradas. En la recuperación de información, 'Precision'
+es una medida de la relevancia de los resultados, mientras que 'Recall' es una 
+medida de cuántos resultados verdaderamente relevantes se devuelven.
+Obtuvimos en nuestros modelos puntajes que superan el 70%. Existe entonces una
+alta recuperación y una alta precisión, donde la alta precisión se relaciona con
+una tasa baja de falsos positivos y la alta recuperación se relaciona con una
+baja tasa de falsos negativos. Los puntajes altos para ambos muestran que el
+clasificador está arrojando resultados precisos, así como también, que los
+mismos están taggeados correctamente.
